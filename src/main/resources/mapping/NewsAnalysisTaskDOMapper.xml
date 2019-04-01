@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmb.newsanalysistaskcreator.dao.NewsAnalysisTaskDOMapper">
+  <resultMap id="BaseResultMap" type="com.cmb.newsanalysistaskcreator.model.NewsAnalysisTaskDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="model_status" jdbcType="VARCHAR" property="modelStatus" />
+    <result column="task_status" jdbcType="TINYINT" property="taskStatus" />
+    <result column="task_uid" jdbcType="BIGINT" property="taskUid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, created_time, model_status, task_status, task_uid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from news_analysis_task
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from news_analysis_task
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cmb.newsanalysistaskcreator.model.NewsAnalysisTaskDO">
+    insert into news_analysis_task (id, created_time, model_status, 
+      task_status, task_uid)
+    values (#{id,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{modelStatus,jdbcType=VARCHAR}, 
+      #{taskStatus,jdbcType=TINYINT}, #{taskUid,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cmb.newsanalysistaskcreator.model.NewsAnalysisTaskDO">
+    insert into news_analysis_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modelStatus != null">
+        model_status,
+      </if>
+      <if test="taskStatus != null">
+        task_status,
+      </if>
+      <if test="taskUid != null">
+        task_uid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modelStatus != null">
+        #{modelStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="taskStatus != null">
+        #{taskStatus,jdbcType=TINYINT},
+      </if>
+      <if test="taskUid != null">
+        #{taskUid,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cmb.newsanalysistaskcreator.model.NewsAnalysisTaskDO">
+    update news_analysis_task
+    <set>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modelStatus != null">
+        model_status = #{modelStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="taskStatus != null">
+        task_status = #{taskStatus,jdbcType=TINYINT},
+      </if>
+      <if test="taskUid != null">
+        task_uid = #{taskUid,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cmb.newsanalysistaskcreator.model.NewsAnalysisTaskDO">
+    update news_analysis_task
+    set created_time = #{createdTime,jdbcType=TIMESTAMP},
+      model_status = #{modelStatus,jdbcType=VARCHAR},
+      task_status = #{taskStatus,jdbcType=TINYINT},
+      task_uid = #{taskUid,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

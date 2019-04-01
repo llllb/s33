@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmb.newsanalysistaskcreator.dao.NewsAnalysisRawDataDOMapper">
+  <resultMap id="BaseResultMap" type="com.cmb.newsanalysistaskcreator.model.NewsAnalysisRawDataDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="data_uid" jdbcType="BIGINT" property="dataUid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.cmb.newsanalysistaskcreator.model.NewsAnalysisRawDataDO">
+    <result column="news_analysis_data" jdbcType="LONGVARBINARY" property="newsAnalysisData" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, created_time, data_uid
+  </sql>
+  <sql id="Blob_Column_List">
+    news_analysis_data
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from news_analysis_raw_data
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from news_analysis_raw_data
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cmb.newsanalysistaskcreator.model.NewsAnalysisRawDataDO">
+    insert into news_analysis_raw_data (id, created_time, data_uid, 
+      news_analysis_data)
+    values (#{id,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{dataUid,jdbcType=BIGINT}, 
+      #{newsAnalysisData,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cmb.newsanalysistaskcreator.model.NewsAnalysisRawDataDO">
+    insert into news_analysis_raw_data
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="dataUid != null">
+        data_uid,
+      </if>
+      <if test="newsAnalysisData != null">
+        news_analysis_data,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataUid != null">
+        #{dataUid,jdbcType=BIGINT},
+      </if>
+      <if test="newsAnalysisData != null">
+        #{newsAnalysisData,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cmb.newsanalysistaskcreator.model.NewsAnalysisRawDataDO">
+    update news_analysis_raw_data
+    <set>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dataUid != null">
+        data_uid = #{dataUid,jdbcType=BIGINT},
+      </if>
+      <if test="newsAnalysisData != null">
+        news_analysis_data = #{newsAnalysisData,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.cmb.newsanalysistaskcreator.model.NewsAnalysisRawDataDO">
+    update news_analysis_raw_data
+    set created_time = #{createdTime,jdbcType=TIMESTAMP},
+      data_uid = #{dataUid,jdbcType=BIGINT},
+      news_analysis_data = #{newsAnalysisData,jdbcType=LONGVARBINARY}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cmb.newsanalysistaskcreator.model.NewsAnalysisRawDataDO">
+    update news_analysis_raw_data
+    set created_time = #{createdTime,jdbcType=TIMESTAMP},
+      data_uid = #{dataUid,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!--查询一段时间内的数据-->
+  <select id="selectByTimeParams" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select *
+    from news_analysis_raw_data
+    <where>
+      <if test="param.id!= null and param.id!= ''">id
+        ID = #{param.id}
+      </if>
+      <if test="param.begintTime!=null and param.begintTime!=''">
+        <![CDATA[  and DATE_FORMAT(created_time, '%Y-%m-%d %T:%i:%s') >= DATE_FORMAT(#{param.begintTime}, '%Y-%m-%d %T:%i:%s')   ]]>
+      </if>
+      <if test="param.endTime!=null and param.endTime!=''">
+        <![CDATA[  and DATE_FORMAT(created_time, '%Y-%m-%d %T:%i:%s') <= DATE_FORMAT(#{param.endTime}, '%Y-%m-%d %T:%i:%s')   ]]>
+      </if>
+    </where>
+  </select>
+</mapper>
